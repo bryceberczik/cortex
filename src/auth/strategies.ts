@@ -33,7 +33,7 @@ passport.use(
             },
           },
           create: {
-            username: generateUsername(profile.username),
+            username: generateUsername(profile.username || profile.displayName),
             email: profile.emails ? profile.emails[0].value : null,
             provider: "GOOGLE",
             providerId: profile.id,
@@ -72,7 +72,7 @@ passport.use(
             },
           },
           create: {
-            username: generateUsername(profile.username),
+            username: generateUsername(profile.username || profile.displayName),
             email: profile.emails ? profile.emails[0].value : null,
             provider: "GITHUB",
             providerId: profile.id,

@@ -2,9 +2,10 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
-import cors from "cors";
 import path from "path";
 import routes from "./routes/index";
+import "./auth/strategies";
+import "./auth/serializers";
 
 dotenv.config();
 
@@ -27,7 +28,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(process.cwd(), "../client/dist")));

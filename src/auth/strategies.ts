@@ -8,6 +8,7 @@ import { VerifyCallback } from "passport-oauth2";
 import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();
+const DOMAIN = process.env.DOMAIN!;
 
 const generateUsername = (username?: string) => {
   const base = username || "user";
@@ -20,26 +21,31 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: "http://localhost:3001/auth/google/callback",
+      callbackURL: `${DOMAIN}/auth/google/callback`,
     },
     async (_accessToken, _refreshToken, profile, cb) => {
-      const user = await prisma.user.upsert({
-        where: {
-          provider_providerId: {
+      try {
+        const user = await prisma.user.upsert({
+          where: {
+            provider_providerId: {
+              provider: "GOOGLE",
+              providerId: profile.id,
+            },
+          },
+          create: {
+            username: generateUsername(profile.username),
+            email: profile.emails ? profile.emails[0].value : null,
             provider: "GOOGLE",
             providerId: profile.id,
           },
-        },
-        create: {
-          username: generateUsername(profile.username),
-          email: profile.emails ? profile.emails[0].value : null,
-          provider: "GOOGLE",
-          providerId: profile.id,
-        },
-        update: {},
-      });
+          update: {},
+        });
 
-      return cb(null, user);
+        return cb(null, user);
+      } catch (error) {
+        console.error("Google Passport error:", error);
+        cb(error);
+      }
     }
   )
 );
@@ -49,7 +55,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      callbackURL: "http://localhost:3001/auth/github/callback",
+      callbackURL: `${DOMAIN}/auth/github/callback`,
     },
     async (
       _accessToken: string,
@@ -57,23 +63,28 @@ passport.use(
       profile: GitHubProfile,
       cb: VerifyCallback
     ) => {
-      const user = await prisma.user.upsert({
-        where: {
-          provider_providerId: {
+      try {
+        const user = await prisma.user.upsert({
+          where: {
+            provider_providerId: {
+              provider: "GITHUB",
+              providerId: profile.id,
+            },
+          },
+          create: {
+            username: generateUsername(profile.username),
+            email: profile.emails ? profile.emails[0].value : null,
             provider: "GITHUB",
             providerId: profile.id,
           },
-        },
-        create: {
-          username: generateUsername(profile.username),
-          email: profile.emails ? profile.emails[0].value : null,
-          provider: "GITHUB",
-          providerId: profile.id,
-        },
-        update: {},
-      });
+          update: {},
+        });
 
-      return cb(null, user);
+        return cb(null, user);
+      } catch (error) {
+        console.error("GitHub Passport error:", error);
+        cb(error);
+      }
     }
   )
 );

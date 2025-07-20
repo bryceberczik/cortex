@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import apiRoutes from "./api/index";
 import authRoutes from "./authRoutes";
 
@@ -6,5 +6,6 @@ const router = Router();
 
 router.use("/api", apiRoutes);
 router.use("/auth", authRoutes);
+router.use("/health", (_req: Request, res: Response) => res.sendStatus(200));
 
 export default router;

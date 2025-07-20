@@ -18,7 +18,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: "http://localhost:3001/auth/google/callback",
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (_accessToken, _refreshToken, profile, cb) => {
       const user = await prisma.user.upsert({
         where: {
           provider_providerId: {

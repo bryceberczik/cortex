@@ -35,6 +35,4 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const getMyProfile = async (req: Request, res: Response) => {};
-
 export const deleteUser = async (req: Request, res: Response) => {};

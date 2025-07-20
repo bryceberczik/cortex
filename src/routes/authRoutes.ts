@@ -16,6 +16,19 @@ router.get(
   })
 );
 
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["read:user", "user:email"] })
+);
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    failureRedirect: "/login",
+    successRedirect: "/",
+  })
+);
+
 router.get("/me", (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -38,3 +51,5 @@ router.get("/logout", (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+export default router;

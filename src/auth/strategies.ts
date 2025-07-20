@@ -1,6 +1,10 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as GitHubStrategy } from "passport-github2";
+import {
+  Strategy as GitHubStrategy,
+  Profile as GitHubProfile,
+} from "passport-github2";
+import { VerifyCallback } from "passport-oauth2";
 import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();
@@ -30,6 +34,40 @@ passport.use(
           username: generateUsername(profile.username),
           email: profile.emails ? profile.emails[0].value : null,
           provider: "GOOGLE",
+          providerId: profile.id,
+        },
+        update: {},
+      });
+
+      return cb(null, user);
+    }
+  )
+);
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      callbackURL: "http://localhost:3001/auth/github/callback",
+    },
+    async (
+      _accessToken: string,
+      _refreshToken: string,
+      profile: GitHubProfile,
+      cb: VerifyCallback
+    ) => {
+      const user = await prisma.user.upsert({
+        where: {
+          provider_providerId: {
+            provider: "GITHUB",
+            providerId: profile.id,
+          },
+        },
+        create: {
+          username: generateUsername(profile.username),
+          email: profile.emails ? profile.emails[0].value : null,
+          provider: "GITHUB",
           providerId: profile.id,
         },
         update: {},

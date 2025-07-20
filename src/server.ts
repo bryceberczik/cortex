@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
+import session from "express-session";
+import passport from "passport";
 import cors from "cors";
 import path from "path";
 import routes from "./routes/index";
@@ -8,6 +10,22 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT!;
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true in production
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cors());
 app.use(express.json());

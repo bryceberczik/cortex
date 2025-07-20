@@ -3,7 +3,7 @@ import { fetchPosts } from "../config/contentfulConfig";
 
 export const getAllPosts = async (_req: Request, res: Response) => {
   try {
-    const posts = await fetchPosts("Post");
+    const posts = await fetchPosts("post");
 
     res.status(200).json(posts);
   } catch (error) {

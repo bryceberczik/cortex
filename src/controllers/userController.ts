@@ -3,7 +3,7 @@ import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();
 
-export const getAllUsers = async (_req: Request, res: Response) => {
+export const getUsers = async (_req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
@@ -17,7 +17,12 @@ export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: { comments: true, likedPosts: true, likedComments: true },
+      omit: { email: true, password: true },
+    });
+
     if (!user) {
       res.status(404).json({ message: "User not found." });
       return;
@@ -29,3 +34,7 @@ export const getUserById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const getMyProfile = async (req: Request, res: Response) => {};
+
+export const deleteUser = async (req: Request, res: Response) => {};

@@ -39,7 +39,7 @@ model Post {
 
 model Comment {
   id      String @id @default(cuid())
-  content String
+  content String @db.String(500)
   likedBy User[] @relation("UserLikesComments")
 
   authorId String
@@ -49,4 +49,6 @@ model Comment {
   post   Post   @relation(fields: [postId], references: [id])
 
   postedAt DateTime @default(now())
+
+  @@unique([id, authorId])
 }

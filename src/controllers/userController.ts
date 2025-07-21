@@ -20,7 +20,7 @@ export const getUserById = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
       where: { id },
       include: { comments: true, likedPosts: true, likedComments: true },
-      omit: { email: true, password: true },
+      omit: { email: true, provider: true, providerId: true },
     });
 
     if (!user) {
@@ -34,7 +34,5 @@ export const getUserById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-export const getMyProfile = async (req: Request, res: Response) => {};
 
 export const deleteUser = async (req: Request, res: Response) => {};

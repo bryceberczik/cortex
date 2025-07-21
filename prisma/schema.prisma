@@ -39,7 +39,7 @@ model Post {
 
 model Comment {
   id      String @id @default(cuid())
-  content String
+  content String @db.String(500)
   likedBy User[] @relation("UserLikesComments")
 
   authorId String

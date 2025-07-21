@@ -35,11 +35,8 @@
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
-<<<<<<< HEAD
     "contentful": "^11.7.7",
     "cors": "^2.8.5",
-=======
->>>>>>> 8f63ac0b62849ce48f2989a7360e512f546fd7de
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "passport": "^0.7.0",

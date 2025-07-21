@@ -106,7 +106,12 @@ export const editComment = async (req: Request, res: Response) => {
 
   try {
     const comment = await prisma.comment.update({
-      where: { id: data.commentId },
+      where: {
+        id_authorId: {
+          id: data.commentId,
+          authorId: req.id,
+        },
+      },
       data: { content: data.content },
     });
 
@@ -130,7 +135,15 @@ export const deleteComment = async (req: Request, res: Response) => {
   }
 
   try {
-    await prisma.comment.delete({ where: { id: parsedId.data } });
+    await prisma.comment.delete({
+      where: {
+        id_authorId: {
+          id: parsedId.data,
+          authorId: req.id,
+        },
+      },
+    });
+
     res.sendStatus(204);
   } catch (error) {
     console.error("Error deleting comment:", error);

@@ -6,6 +6,10 @@ import {
   editCommentSchema,
 } from "../../schemas/commentSchema";
 
+// TODO: batchGetComments
+
+// TODO: toggleLikeComment
+
 const prisma = new PrismaClient();
 
 export const getComments = async (_req: Request, res: Response) => {

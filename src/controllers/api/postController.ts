@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { PrismaClient } from "../../../generated/prisma";
 import idSchema from "../../schemas/idSchema";
 
+// TODO: toggleLikePost
+
 const prisma = new PrismaClient();
 
 export const getPosts = async (_req: Request, res: Response) => {

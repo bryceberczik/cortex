@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "../../../generated/prisma";
 
+// TODO: unpublishPost
+
 const prisma = new PrismaClient();
 
 export const publishPost = async (req: Request, res: Response) => {
@@ -31,5 +33,3 @@ export const publishPost = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-// TODO: unpublishPost

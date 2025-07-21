@@ -28,12 +28,13 @@ model User {
 }
 
 model Post {
-  id       String    @id @default(cuid())
-  title    String
-  content  String
-  likedBy  User[]    @relation("UserLikesPosts")
-  comments Comment[]
-  postedAt DateTime  @default(now())
+  id           String    @id @default(cuid())
+  contentfulId String    @unique
+  title        String
+  content      Json
+  likedBy      User[]    @relation("UserLikesPosts")
+  comments     Comment[]
+  postedAt     DateTime  @default(now())
 }
 
 model Comment {
@@ -48,5 +49,4 @@ model Comment {
   post   Post   @relation(fields: [postId], references: [id])
 
   postedAt DateTime @default(now())
-  editedAt DateTime @updatedAt
 }

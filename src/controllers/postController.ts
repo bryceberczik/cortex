@@ -20,20 +20,13 @@ export const getAllPosts = async (_req: Request, res: Response) => {
   }
 };
 
-export const createPost = async (req: Request, res: Response) => {
+export const publishPost = async (req: Request, res: Response) => {
   const { sys, fields } = req.body;
 
-  const locales = Object.keys(fields.title || {});
-
-  if (!locales.length) {
-    return res.status(400).json({ message: "No title provided" });
-  }
-
-  const locale = locales[0];
-
   const contentfulId: string = sys.id;
-  const title: string = fields.title[locale];
-  const content: string = (fields.body && fields.body[locale]) || "";
+
+  const title: string = fields.title["en-US"];
+  const content: string = fields.content["en-US"];
 
   try {
     const post = await prisma.post.upsert({

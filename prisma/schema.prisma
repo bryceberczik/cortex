@@ -31,7 +31,7 @@ model Post {
   id           String    @id @default(cuid())
   contentfulId String    @unique
   title        String
-  content      String
+  content      Json
   likedBy      User[]    @relation("UserLikesPosts")
   comments     Comment[]
   postedAt     DateTime  @default(now())

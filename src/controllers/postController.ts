@@ -21,10 +21,29 @@ export const getAllPosts = async (_req: Request, res: Response) => {
 };
 
 export const createPost = async (req: Request, res: Response) => {
+  const { fields } = req.body;
+
+  const locales = Object.keys(fields.title || {});
+
+  if (!locales.length) {
+    return res.status(400).json({ message: "No title provided" });
+  }
+
+  const locale = locales[0];
+
+  const title: string = fields.title[locale];
+  const content: string = (fields.body && fields.body[locale]) || "";
+
   try {
-    
+
+    const post = await prisma.post.upsert({
+      create: {
+        title: title,
+        content: content,
+      }
+    })
   } catch (error) {
-    console.error("Error creating prisma entry:", error);
+    console.error("Error creating post entry:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

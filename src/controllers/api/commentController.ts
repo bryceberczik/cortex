@@ -6,10 +6,6 @@ import {
   editCommentSchema,
 } from "../../schemas/commentSchema";
 
-// TODO: batchGetComments
-
-// TODO: toggleLikeComment
-
 const prisma = new PrismaClient();
 
 export const getComments = async (_req: Request, res: Response) => {
@@ -61,6 +57,52 @@ export const getCommentById = async (req: Request, res: Response) => {
     res.status(200).json(comment);
   } catch (error) {
     console.error("Error fetching comment by ID:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const toggleCommentLike = async (req: Request, res: Response) => {
+  if (!req.id) {
+    res.status(400).json({ message: "Missing authentication values." });
+    return;
+  }
+
+  const parsedId = idSchema.safeParse(req.params.id);
+  if (!parsedId.success) {
+    res.status(400).json({ message: "Request Parsing Error" });
+    return;
+  }
+
+  try {
+    const existingLike = await prisma.user.findUnique({
+      where: { id: req.id },
+      select: {
+        likedComments: {
+          where: { id: parsedId.data },
+          select: { id: true },
+        },
+      },
+    });
+
+    const isLiked = !!existingLike
+      ? existingLike.likedComments.length > 0
+      : false;
+
+    if (isLiked) {
+      await prisma.user.update({
+        where: { id: req.id },
+        data: { likedComments: { disconnect: { id: parsedId.data } } },
+      });
+    } else {
+      await prisma.user.update({
+        where: { id: req.id },
+        data: { likedComments: { connect: { id: parsedId.data } } },
+      });
+    }
+
+    res.status(200).json({ message: "Toggled comment like successfully." });
+  } catch (error) {
+    console.error("Error toggling comment like:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

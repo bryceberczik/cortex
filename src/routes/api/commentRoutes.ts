@@ -3,6 +3,7 @@ import {
   getComments,
   getCommentsByPost,
   getCommentById,
+  toggleCommentLike,
   createComment,
   editComment,
   deleteComment,
@@ -15,6 +16,8 @@ router.get("/", getComments);
 router.get("/post/:id", getCommentsByPost);
 
 router.get("/:id", getCommentById);
+
+router.put("/:id", toggleCommentLike);
 
 router.post("/", createComment);
 

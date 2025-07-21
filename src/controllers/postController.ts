@@ -21,7 +21,7 @@ export const getAllPosts = async (_req: Request, res: Response) => {
 };
 
 export const createPost = async (req: Request, res: Response) => {
-  const { fields } = req.body;
+  const { sys, fields } = req.body;
 
   const locales = Object.keys(fields.title || {});
 
@@ -31,17 +31,25 @@ export const createPost = async (req: Request, res: Response) => {
 
   const locale = locales[0];
 
+  const contentfulId: string = sys.id;
   const title: string = fields.title[locale];
   const content: string = (fields.body && fields.body[locale]) || "";
 
   try {
-
     const post = await prisma.post.upsert({
+      where: { contentfulId },
       create: {
-        title: title,
-        content: content,
-      }
-    })
+        contentfulId,
+        title,
+        content,
+      },
+      update: {
+        title,
+        content,
+      },
+    });
+
+    res.status(201).json(post);
   } catch (error) {
     console.error("Error creating post entry:", error);
     res.status(500).json({ message: "Internal Server Error" });

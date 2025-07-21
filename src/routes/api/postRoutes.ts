@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getPosts, publishPost } from "../../controllers/postController";
+import { getPosts, getPostById } from "../../controllers/api/postController";
 
 const router = Router();
 
 router.get("/", getPosts);
 
-router.post("/", publishPost);
+router.get("/:id", getPostById);
 
 export { router as postRouter };

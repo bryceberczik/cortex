@@ -3,7 +3,7 @@ import {
   getUsers,
   getUserById,
   deleteUser,
-} from "../../controllers/userController";
+} from "../../controllers/api/userController";
 
 const router = Router();
 

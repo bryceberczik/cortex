@@ -1,17 +1,13 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "../../../generated/prisma";
+
+// TODO: changeUsername
+
+// TODO: changeIcon
+
+// TODO: toggleEmailNewsletter
 
 const prisma = new PrismaClient();
-
-export const getUsers = async (_req: Request, res: Response) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users);
-  } catch (error) {
-    console.error("Error fetching all users:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -19,7 +15,6 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
-      include: { comments: true, likedPosts: true, likedComments: true },
       omit: { email: true, provider: true, providerId: true },
     });
 
@@ -35,4 +30,17 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {};
+export const deleteUser = async (req: Request, res: Response) => {
+  if (!req.id) {
+    res.status(400).json({ message: "Missing authentication values." });
+    return;
+  }
+
+  try {
+    await prisma.user.delete({ where: { id: req.id } });
+    res.sendStatus(204);
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

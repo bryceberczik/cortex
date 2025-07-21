@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "../../generated/prisma";
-import idSchema from "../schemas/idSchema";
+import { PrismaClient } from "../../../generated/prisma";
+import idSchema from "../../schemas/idSchema";
 import {
   createCommentSchema,
   editCommentSchema,
-} from "../schemas/commentSchema";
+} from "../../schemas/commentSchema";
+
+// TODO: batchGetComments
+
+// TODO: toggleLikeComment
 
 const prisma = new PrismaClient();
 

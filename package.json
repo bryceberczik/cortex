@@ -22,9 +22,12 @@
   },
   "homepage": "https://github.com/bryceberczik/cortex#readme",
   "devDependencies": {
+    "@babel/preset-typescript": "^7.27.1",
     "@eslint/js": "^9.31.0",
+    "@jest/globals": "^30.0.5",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.15",
     "@types/passport": "^1.0.17",
     "@types/passport-github2": "^1.2.9",
@@ -35,6 +38,7 @@
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.12.0",
+    "ts-jest": "^29.4.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"

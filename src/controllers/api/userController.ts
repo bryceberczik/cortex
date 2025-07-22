@@ -25,19 +25,6 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const changeUsername = async (req: Request, res: Response) => {
-  if (!req.id) {
-    res.status(400).json({ message: "Missing authentication values." });
-    return;
-  }
-
-  try {
-  } catch (error) {
-    console.error("Error changing username:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
 export const toggleEmailNewsletter = async (req: Request, res: Response) => {
   if (!req.id) {
     res.status(404).json({ message: "Missing authentication values." });
@@ -63,6 +50,33 @@ export const toggleEmailNewsletter = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Toggled email newsletter successfully." });
   } catch (error) {
     console.error("Error toggling email newsletter:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const changeUsername = async (req: Request, res: Response) => {
+  if (!req.id) {
+    res.status(400).json({ message: "Missing authentication values." });
+    return;
+  }
+
+  const parsedReq = changeUsernameSchema.safeParse(req.body);
+  if (!parsedReq.success) {
+    res.status(400).json({ message: "Request Parsing Error" });
+    return;
+  }
+
+  const { data } = parsedReq;
+
+  try {
+    await prisma.user.update({
+      where: { id: req.id },
+      data: { username: data.username },
+    });
+
+    res.status(200).json({ message: "Changed username successfully." });
+  } catch (error) {
+    console.error("Error changing username:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

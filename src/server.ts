@@ -22,7 +22,7 @@ app.use(
       httpOnly: true,
       sameSite: "lax",
     },
-  })
+  }),
 );
 
 app.use(passport.initialize());

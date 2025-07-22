@@ -5,7 +5,7 @@ const router = Router();
 
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
 router.get(
@@ -13,12 +13,12 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: "/login",
     successRedirect: "/",
-  })
+  }),
 );
 
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["read:user", "user:email"] })
+  passport.authenticate("github", { scope: ["read:user", "user:email"] }),
 );
 
 router.get(
@@ -26,7 +26,7 @@ router.get(
   passport.authenticate("github", {
     failureRedirect: "/login",
     successRedirect: "/",
-  })
+  }),
 );
 
 router.get("/me", (req: Request, res: Response) => {

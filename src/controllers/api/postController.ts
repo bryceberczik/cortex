@@ -59,7 +59,7 @@ export const togglePostLike = async (req: Request, res: Response) => {
       },
     });
 
-    const isLiked = !!existingLike ? existingLike.likedPosts.length > 0 : false;
+    const isLiked = existingLike ? existingLike.likedPosts.length > 0 : false;
 
     if (isLiked) {
       await prisma.user.update({

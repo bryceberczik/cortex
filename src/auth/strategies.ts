@@ -46,8 +46,8 @@ passport.use(
         console.error("Google Passport error:", error);
         cb(error);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.use(
@@ -61,7 +61,7 @@ passport.use(
       _accessToken: string,
       _refreshToken: string,
       profile: GitHubProfile,
-      cb: VerifyCallback
+      cb: VerifyCallback,
     ) => {
       try {
         const user = await prisma.user.upsert({
@@ -85,6 +85,6 @@ passport.use(
         console.error("GitHub Passport error:", error);
         cb(error);
       }
-    }
-  )
+    },
+  ),
 );

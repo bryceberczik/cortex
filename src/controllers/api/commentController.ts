@@ -84,7 +84,7 @@ export const toggleCommentLike = async (req: Request, res: Response) => {
       },
     });
 
-    const isLiked = !!existingLike
+    const isLiked = existingLike
       ? existingLike.likedComments.length > 0
       : false;
 

@@ -3,9 +3,9 @@ import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();
 
-passport.serializeUser((user: any, cb) => {
+passport.serializeUser((id: string, cb) => {
   try {
-    cb(null, user.id);
+    cb(null, id);
   } catch (error) {
     console.error("Error serializing user:", error);
     cb(error);

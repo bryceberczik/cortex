@@ -4,7 +4,7 @@ import idSchema from "../../schemas/idSchema";
 import {
   createCommentSchema,
   editCommentSchema,
-} from "../../schemas/commentSchema";
+} from "../../schemas/commentSchemas";
 
 const prisma = new PrismaClient();
 
@@ -74,7 +74,7 @@ export const toggleCommentLike = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingLike = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: req.id },
       select: {
         likedComments: {
@@ -84,10 +84,12 @@ export const toggleCommentLike = async (req: Request, res: Response) => {
       },
     });
 
-    const isLiked = existingLike
-      ? existingLike.likedComments.length > 0
-      : false;
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
 
+    const isLiked = user.likedComments.length > 0;
     if (isLiked) {
       await prisma.user.update({
         where: { id: req.id },

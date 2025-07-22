@@ -22,6 +22,7 @@ model User {
   comments      Comment[]
   likedPosts    Post[]    @relation("UserLikesPosts")
   likedComments Comment[] @relation("UserLikesComments")
+  emailOptIn    Boolean   @default(false)
   createdAt     DateTime  @default(now()) @db.Timestamp(6)
 
   @@unique([provider, providerId])

@@ -49,7 +49,7 @@ export const togglePostLike = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingLike = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: req.id },
       select: {
         likedPosts: {
@@ -59,8 +59,12 @@ export const togglePostLike = async (req: Request, res: Response) => {
       },
     });
 
-    const isLiked = existingLike ? existingLike.likedPosts.length > 0 : false;
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
 
+    const isLiked = user.likedPosts.length > 0;
     if (isLiked) {
       await prisma.user.update({
         where: { id: req.id },

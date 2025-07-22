@@ -3,9 +3,9 @@ import { PrismaClient } from "../../generated/prisma";
 
 const prisma = new PrismaClient();
 
-passport.serializeUser((user: any, cb) => {
+passport.serializeUser((id: string, cb) => {
   try {
-    cb(null, user.id);
+    cb(null, id);
   } catch (error) {
     console.error("Error serializing user:", error);
     cb(error);
@@ -16,7 +16,7 @@ passport.deserializeUser(async (id: string, cb) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
-      omit: { email: true, provider: true, providerId: true },
+      omit: { email: true, provider: true, providerId: true, emailOptIn: true },
     });
 
     cb(null, user);

@@ -10,7 +10,7 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
-      omit: { email: true, provider: true, providerId: true },
+      omit: { email: true, provider: true, providerId: true, emailOptIn: true },
     });
 
     if (!user) {

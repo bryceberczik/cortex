@@ -39,9 +39,10 @@ passport.use(
             providerId: profile.id,
           },
           update: {},
+          select: { id: true },
         });
 
-        return cb(null, user);
+        return cb(null, user.id);
       } catch (error) {
         console.error("Google Passport error:", error);
         cb(error);
@@ -78,9 +79,10 @@ passport.use(
             providerId: profile.id,
           },
           update: {},
+          select: { id: true },
         });
 
-        return cb(null, user);
+        return cb(null, user.id);
       } catch (error) {
         console.error("GitHub Passport error:", error);
         cb(error);

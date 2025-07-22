@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
-import path from "path";
+// import path from "path";
 import routes from "./routes/index";
 import "./auth/strategies";
 import "./auth/serializers";
